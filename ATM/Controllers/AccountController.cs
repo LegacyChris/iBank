@@ -151,16 +151,17 @@ namespace ATM.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.FirstName, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     var db = new ApplicationDbContext();
-                    var checkingAccount = new CheckingAccount { FirstName = model.FirstName, LastName = model.LastName, AccountNumber = "0003246669", Balance = 0, ApplicationUserId = user.Id };
+                    var accountNumber = (123456 + db.CheckingAccounts.Count().ToString().PadLeft(10, '0'));
+                    var checkingAccount = new CheckingAccount { FirstName = model.FirstName, LastName = model.LastName, AccountNumber = accountNumber, Balance = 0, ApplicationUserId = user.Id };
                     db.CheckingAccounts.Add(checkingAccount);
                     db.SaveChanges();
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -169,7 +170,12 @@ namespace ATM.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                else
+                {
+                    AddErrors(result);
+                }
+                //If we come this far, something fails, display Home Form
+                return View(model);
             }
 
             // If we got this far, something failed, redisplay form
@@ -351,7 +357,7 @@ namespace ATM.Controllers
             }
         }
 
-        //
+        // 
         // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
