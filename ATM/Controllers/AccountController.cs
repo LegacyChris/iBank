@@ -156,10 +156,13 @@ namespace ATM.Controllers
                 if (result.Succeeded)
                 {
                     var db = new ApplicationDbContext();
-                    var accountNumber = (123456 + db.CheckingAccounts.Count().ToString().PadLeft(10, '0'));
+                    var accountNumber = (123456 + db.CheckingAccounts.Count()).ToString().PadLeft(10, '0');
                     var checkingAccount = new CheckingAccount { FirstName = model.FirstName, LastName = model.LastName, AccountNumber = accountNumber, Balance = 0, ApplicationUserId = user.Id };
                     db.CheckingAccounts.Add(checkingAccount);
+                    //db.GetValidationErrors();
+                    //await db.SaveChangesAsync();
                     db.SaveChanges();
+                   
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -174,8 +177,7 @@ namespace ATM.Controllers
                 {
                     AddErrors(result);
                 }
-                //If we come this far, something fails, display Home Form
-                return View(model);
+               
             }
 
             // If we got this far, something failed, redisplay form
