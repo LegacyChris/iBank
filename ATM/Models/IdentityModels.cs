@@ -47,5 +47,6 @@ namespace ATM.Models
             }
         }
 
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

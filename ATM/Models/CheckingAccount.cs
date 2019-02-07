@@ -9,7 +9,7 @@ namespace ATM.Models
 {
     public class CheckingAccount
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "First Name")]
         [Required]
@@ -45,5 +45,6 @@ namespace ATM.Models
         [Required]
         public string ApplicationUserId { get; set; }
 
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }
