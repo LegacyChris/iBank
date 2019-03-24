@@ -16,7 +16,7 @@ namespace ATM.Controllers
         {
             return View();
         }
-
+ 
         [HttpPost]
         public ActionResult Deposit(Transaction transaction)
         {
