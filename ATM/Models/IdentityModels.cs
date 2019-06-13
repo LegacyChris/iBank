@@ -21,34 +21,5 @@ namespace ATM.Models
         public string Pin { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-
-        public DbSet<CheckingAccount> CheckingAccounts { get; set; }
-
-        public DbSet<Transaction> Transactions { get; set; }
-
-        public override int SaveChanges()
-        {
-            try
-            {
-                return base.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                string errorMessages = string.Join("; ", ex.EntityValidationErrors.SelectMany(x => x.ValidationErrors).Select(x => x.PropertyName + ": " + x.ErrorMessage));
-                throw new DbEntityValidationException(errorMessages);
-            }
-        }
-
-    }
+   
 }

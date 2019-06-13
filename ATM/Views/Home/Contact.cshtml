@@ -15,3 +15,12 @@
     <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
     <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
 </address>
+<div if="formsection">
+    <h6>@ViewBag.TheMessage</h6>
+    @using (Ajax.BeginForm(new AjaxOptions { HttpMethod = "post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "formsection" }))
+    {
+        <textarea name="message" required></textarea><br /><br />
+
+        <input type="submit" value="send" title="Click here to send" />
+    }
+</div> 

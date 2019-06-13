@@ -34,9 +34,20 @@ namespace ATM.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Would you like to talk to us?";
 
             return View();
+        }
+        [HttpPost]
+        public ActionResult Contact(string message)
+        {
+            ViewBag.TheMessage = "Your message has been recieved!";
+
+            return View();
+        }
+        public ActionResult Foo()
+        {
+            return View("About");
         }
     }
 }

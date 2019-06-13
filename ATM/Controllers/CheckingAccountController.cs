@@ -5,11 +5,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ATM.Controllers;
+using Microsoft.AspNet.Identity;
 
 namespace ATM.Controllers
 {
+    [Authorize]
     public class CheckingAccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
         // GET: CheckingAccount
         public ActionResult Index()
         {
@@ -19,10 +22,25 @@ namespace ATM.Controllers
         // GET: CheckingAccount/Details/5
         public ActionResult Details()
         {
-            var account = new CheckingAccount { FirstName = "Evelyn", LastName = "Chime", AccountNumber = "6170754779", Balance = 4568890.89m };
+            var userId = User.Identity.GetUserId();
+            var account = db.CheckingAccounts.Where(c => c.ApplicationUserId == userId).First();
             return View(account);
         }
 
+        [Authorize(Roles ="Admin")]
+        public ActionResult DetailsForAdmin(int id)
+        {
+            //var userId = User.Identity.GetUserId();
+            var account = db.CheckingAccounts.Find(id);
+            return View("Details", account);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult List()
+        {
+            return View(db.CheckingAccounts.ToList());
+        }
+         
         // GET: CheckingAccount/Create
         public ActionResult Create()
         {
